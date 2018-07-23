@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
 
-
-const DEFAULT_QUERY = "redux";
-const DEFAULT_HPP = '100';
-const PATH_BASE = "https://hn.algolia.com/api/v1";
-const PATH_SEARCH = "/search";
-const PARAM_SEARCH = "query=";
-const PARAM_PAGE = "page=";
-const PARAM_HPP = "hitsPerPage=";
-
-
+// importing components
+import Table from "./components/Table";
+import Button from "./components/Button";
+import Search from "./components/Search";
+import {
+    DEFAULT_QUERY,
+    DEFAULT_HPP,
+    PATH_BASE,
+    PATH_SEARCH,
+    PARAM_HPP,
+    PARAM_PAGE,
+    PARAM_SEARCH
+} from "./constants";
 /*
 function isSearched(searchTerm) {
     return function (item) {
@@ -95,59 +98,8 @@ class Button extends Component{
 }
 */
 
-//Search Functional stateless Component
-const Search = ({value, onChange, onSubmit, children}) =>
-    <form onSubmit={onSubmit}>
-        {children}
-        <input type="text"
-               value={value}
-               onChange={onChange}
-        />
-        <button type="submit">{children}</button>
-    </form>
 
 
-//Table Functional stateless Component
-const Table = ({list, pattern, onDismiss}) =>
-    <div className="table">
-        {list.map(item => {
-
-            return (
-                <div key={item.objectID} className="table-row">
-                    <span style={{ width: '40%' }}>
-                        <a href={item.url}>{item.title}</a>
-                    </span>
-                    <span style={{ width: '20%' }}>
-                        {item.author}
-                    </span>
-                    <span style={{ width: '15%' }}>
-                        {item.num_comments} comments
-                    </span>
-                    <span style={{ width: '15%' }}>
-                        {item.points} points
-                    </span>
-                    <span style={{ width: '10%' }}>
-                        <Button
-                            onClick={() => onDismiss(item.objectID)}
-                            className=""
-                        >
-                        Dismiss
-                        </Button>
-                    </span>
-                </div>
-            );
-        })}
-    </div>
-
-//Button Functional stateless Component
-const Button = ({onClick, className="", children}) =>
-    <button
-        onClick={onClick}
-        className={className}
-        type="button"
-    >
-        {children}
-    </button>
 
 
 class App extends Component {

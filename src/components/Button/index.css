@@ -1,0 +1,27 @@
+.button-inline {
+    border-width: 0;
+    background: transparent;
+    color: inherit;
+    text-align: inherit;
+    -webkit-font-smoothing: inherit;
+    padding: 0;
+    font-size: inherit;
+    cursor: pointer;
+}
+.button-active {
+    border-radius: 0;
+    border-bottom: 1px solid #38BB6C;
+}
+button {
+    padding: 8px 20px;
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    letter-spacing: 1px;
+    background: transparent;
+    color: #808080;
+    cursor: pointer;
+}
+button:hover {
+    color: #fff;
+    background-color: #38BB6C;
+}
