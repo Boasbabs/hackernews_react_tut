@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faPray } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
 import "./App.css";
-
-// importing components
+import "./components/Table/index.css";
 import Table from "./components/Table";
 import Button from "./components/Button";
 import Search from "./components/Search";
@@ -18,7 +18,7 @@ import {
   PARAM_PAGE,
   PARAM_SEARCH
 } from "./constants";
-import { library } from "@fortawesome/fontawesome-svg-core";
+
 /*
 function isSearched(searchTerm) {
     return function (item) {
@@ -27,79 +27,8 @@ function isSearched(searchTerm) {
     }
 
 }
-
 const isSearched = searchTerm => item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase());
-*/
-
-/*
-// ES6 Class Component
-class Search extends Component {
-    render() {
-        const { value, onChange, children } = this.props;
-        return (
-            <form action="">
-                {children}
-                <input type="text"
-                       value={value}
-                       onChange={onChange}
-                />
-            </form>
-        )
-    }
-}
-
-class Table extends Component {
-    render() {
-        const {list, pattern, onDismiss } = this.props;
-        return (
-            <div>
-                {list.filter(isSearched(pattern)).map(item => {
-
-                    return (
-                        <div key={item.objectID}>
-                      <span>
-                          <a href={item.url}>{item.title}</a>
-                          <br/>
-                      </span>
-                            <span>{item.author}</span> &nbsp;
-                            <span>{item.num_comments}</span>,&nbsp;
-                            <span>{item.points}</span>&nbsp;
-                            <br/>
-                            <span>
-                                <Button
-                                    onClick={() => onDismiss(item.objectID)} >
-                                    Dismiss 2
-                                </Button>
-                            </span>
-                        </div>
-                    );
-                })}
-            </div>
-        )
-    }
-}
-
-
-class Button extends Component{
-    render() {
-        const {
-            onClick,
-            className = "",
-            children,
-        } = this.props;
-
-        return (
-            <button
-                onClick={onClick}
-                className={className}
-                type="button"
-            >
-                {children}
-            </button>
-        )
-    }
-}
 */
 
 // Loading Indicator
@@ -144,7 +73,9 @@ class App extends Component {
       searchKey: "",
       searchTerm: DEFAULT_QUERY,
       error: null,
-      isLoading: false
+      isLoading: false,
+      sortKey: "NONE",
+      isSortReverse: false
     };
 
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
@@ -153,6 +84,7 @@ class App extends Component {
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
+    this.onSort = this.onSort.bind(this);
   }
 
   onDismiss(id) {
@@ -227,6 +159,13 @@ class App extends Component {
     return !this.state.results[searchTerm];
   }
 
+  // Sorting
+  onSort(sortKey) {
+    const isSortReverse =
+      this.state.sortKey === sortKey && !this.state.isSortReverse;
+    this.setState({ sortKey, isSortReverse });
+  }
+
   // lifecycle method to make asynchronous call
   componentDidMount() {
     this._isMounted = true;
@@ -241,7 +180,15 @@ class App extends Component {
   }
 
   render() {
-    const { searchTerm, results, searchKey, error, isLoading } = this.state;
+    const {
+      searchTerm,
+      results,
+      searchKey,
+      error,
+      isLoading,
+      sortKey,
+      isSortReverse
+    } = this.state;
     const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
     const list =
@@ -266,7 +213,13 @@ class App extends Component {
             <h5>Something went wrong. :( </h5>
           </div>
         ) : (
-          <Table list={list} onDismiss={this.onDismiss} />
+          <Table
+            list={list}
+            sortKey={sortKey}
+            isSortReverse = {isSortReverse}
+            onSort={this.onSort}
+            onDismiss={this.onDismiss}
+          />
         )}
 
         <div className="interactions">
