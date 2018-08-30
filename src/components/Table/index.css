@@ -32,3 +32,9 @@
     text-overflow: ellipsis;
     padding: 0 5px;
 }
+
+.title {
+    text-decoration: none;
+    color: #27ae60;
+    text-transform: capitalize;
+}
