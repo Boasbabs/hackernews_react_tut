@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoffee, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import "./App.css";
 
 // importing components
@@ -103,13 +103,18 @@ class Button extends Component{
 */
 
 // Loading Indicator
-library.add( faSpinner );
+library.add(faSpinner);
 const Loading = () => (
-    <div>
-        <FontAwesomeIcon icon="spinner" size="6x" className="spinner" spin />
-    </div>
-)
+  <div>
+    <FontAwesomeIcon icon="spinner" size="6x" className="spinner" spin />
+  </div>
+);
 
+// Higher Order Component
+const withLoading = Component => ({ isLoading, ...rest }) =>
+  isLoading ? <Loading /> : <Component {...rest} />;
+
+const ButtonWithLoading = withLoading(Button);
 
 class App extends Component {
   /*
@@ -265,15 +270,12 @@ class App extends Component {
         )}
 
         <div className="interactions">
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <Button
-              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
-            >
-              More
-            </Button>
-          )}
+          <ButtonWithLoading
+            isLoading={isLoading}
+            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
+          >
+            More
+          </ButtonWithLoading>
         </div>
       </div>
     );
